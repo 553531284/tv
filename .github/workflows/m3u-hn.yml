@@ -31,6 +31,6 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add ipv6-hn.m3u
         git commit -m "Daily update of ipv6-hn.m3u"
-        git push
+        git push -f origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
