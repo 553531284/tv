@@ -25,10 +25,19 @@ jobs:
       run: |
         mv temp-ipv6.m3u ipv6-hn.m3u
 
-    - name: Commit and push changes
+    - name: Check for modifications
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
+        if [ -n "$(git status --porcelain ipv6-hn.m3u)" ]; then
+          echo "::set-output name=has_changes::true"
+        else
+          echo "::set-output name=has_changes::false"
+        fi
+        
+    - name: Commit and push changes
+      if: ${{ steps.check_modifications.outputs.has_changes == 'true' }}
+      run: |
         git add ipv6-hn.m3u
         git commit -m "Daily update of ipv6-hn.m3u"
         git push -f origin main
